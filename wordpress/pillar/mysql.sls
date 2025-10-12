@@ -1,3 +1,3 @@
 mysql:
-  user: dbadmin
-  password: secure_password_123
+  user: admin
+  password: SecurePassword123

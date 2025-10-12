@@ -1,3 +1,5 @@
 include:
   - .mysql
+  - .apache
+  - .wordpress
 

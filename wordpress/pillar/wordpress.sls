@@ -1,0 +1,4 @@
+wordpress:
+  db_name: wordpress
+  db_user: wordpress
+  db_pass: SecurePassword123
