@@ -4,6 +4,8 @@
 {%- set apache = p.apache %}
 {%- set os_family         = salt['grains.get']('os_family', None) %}
 {%- set directory_root    = apache["directory_root"] %}
+{%- set directory_owner   = apache["directory_owner"] %}
+{%- set directory_group   = apache["directory_group"] %}
 {%- if os_family == 'Suse' %}
 {%- set apache_pkg_name = "apache2" %}
 {%- set apache_svc_name = "apache2.service" %}
@@ -29,6 +31,15 @@ apache_service:
     - require:
       - pkg: {{ apache_pkg_name }}
 
+apache_directory_root:
+  file.directory:
+    - name: {{ directory_root }}
+    - user: {{ directory_owner }}
+    - group: {{ directory_group }}
+    - makedirs: True
+    - require:
+      - pkg: {{ apache_pkg_name }}
+
 apache_vhost:
   file.managed:
     - name: {{ apache_cfg_name }}
@@ -41,7 +52,7 @@ apache_vhost:
             </Directory>
         </VirtualHost>
     - require:
-      - pkg: {{ apache_pkg_name }}
+      - file: {{ directory_root }}
 
 {%- if os_family == 'Debian' %}
 enable_site:

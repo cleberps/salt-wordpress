@@ -14,6 +14,18 @@ suma_wordpress:
       $default: "/var/www/html/wordpress"
       $required: true
 
+    directory_owner:
+      $name: "Directory Owner User"
+      $type: text
+      $default: "www-data"
+      $required: true
+
+    directory_group:
+      $name: "Directory Owner Group"
+      $type: text
+      $default: "www-data"
+      $required: true
+
   mariadb:
     $type: group
     $scope: system
