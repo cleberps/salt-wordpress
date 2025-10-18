@@ -53,6 +53,7 @@ wordpress_permissions:
     - recurse:
       - user
       - group
+      - silent
     - require:
       - cmd: extract_wordpress
 
