@@ -15,7 +15,7 @@
 {%- set mariadb_pwd_file = "/etc/my.cnf.d/salt.cnf" %}
 {%- elif os_family == 'Debian' %}
 {%- set mariadb_pkg_name = "mysql-server" %}
-{%- set mariadb_svc_name = "mysql-server.service" %}
+{%- set mariadb_svc_name = "mysql.service" %}
 {%- set mariadb_pwd_file = "/etc/mysql/mysql.conf.d/salt.cnf" %}
 {%- endif %}
 
