@@ -13,10 +13,13 @@
 {%- set wp_db_passwd    = wp["wordpress_db_password"] %}
 {%- if os_family == 'Suse' %}
 {%- set wp_pkgs         = ["apache2-mod_php8", "php8", "php8-mysql", "php8-gd", "php8-zlib"] %}
+{%- set apache_svc_name = "apache2.service" %}
 {%- elif os_family == 'RedHat' %}
 {%- set wp_pkgs         = ["php", "php-mysql", "php-gd"] %}
+{%- set apache_svc_name = "httpd.service" %}
 {%- elif os_family == 'Debian' %}
 {%- set wp_pkgs         = ["php", "php-mysql", "php-gd"] %}
+{%- set apache_svc_name = "apache2.service" %}
 {%- endif %}
 
 {%- if wp_pkgs|length > 0 %}
@@ -27,7 +30,7 @@ php_install:
       - {{ pkg.strip() }}
       {%- endfor %}
     - watch_in:
-      - id: apache_service
+      - service: {{ apache_svc_name }}
 {%- endif %}
 
 download_wordpress:
