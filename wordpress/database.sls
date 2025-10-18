@@ -8,12 +8,15 @@
 {%- if os_family == 'Suse' %}
 {%- set mariadb_pkg_name = "mariadb" %}
 {%- set mariadb_svc_name = "mariadb.service" %}
+{%- set mariadb_pwd_file = "/etc/my.cnf.d/90-salt.cnf" %}
 {%- elif os_family == 'RedHat' %}
 {%- set mariadb_pkg_name = "mariadb" %}
 {%- set mariadb_svc_name = "mariadb.service" %}
+{%- set mariadb_pwd_file = "/etc/my.cnf.d/salt.cnf" %}
 {%- elif os_family == 'Debian' %}
 {%- set mariadb_pkg_name = "mysql-server" %}
 {%- set mariadb_svc_name = "mysql-server.service" %}
+{%- set mariadb_pwd_file = "/etc/mysql/mysql.conf.d/salt.cnf" %}
 {%- endif %}
 
 database_install:
@@ -35,7 +38,7 @@ database_secure:
 
 database_password_file:
   file.managed:
-    - name: /etc/my.cnf.d/90-salt.cnf
+    - name: {{ mariadb_pwd_file }}
     - contents: |
         [client]
         user={{ db_admin_user }}
