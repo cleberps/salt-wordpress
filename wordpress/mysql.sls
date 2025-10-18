@@ -32,4 +32,18 @@ database_secure:
     - name: mysql -e "ALTER USER '{{ db_admin_user }}'@'localhost' IDENTIFIED BY '{{ db_admin_password }}'; FLUSH PRIVILEGES;"
     - require:
       - service: {{ mariadb_svc_name }}
+
+database_password_file:
+  file.managed:
+    - name: /etc/my.cnf.d/90-salt.cnf
+    - contents: |
+        [client]
+        user={{ db_admin_user }}
+        password={{ db_admin_password }}
+    - user: root
+    - group: root
+    - mode: '0400'
+    - require:
+      - id: database_secure
+
 {%- endif %}

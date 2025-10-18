@@ -17,13 +17,13 @@ suma_wordpress:
     directory_owner:
       $name: "Directory Owner User"
       $type: text
-      $default: "www-data"
+      $default: "wwwrun"
       $required: true
 
     directory_group:
       $name: "Directory Owner Group"
       $type: text
-      $default: "www-data"
+      $default: "www"
       $required: true
 
   mariadb:

@@ -15,14 +15,14 @@
 {%- set wp_pkgs         = ["php8", "php8-mysql", "php8-gd"] %}
 {%- set wp_apache_user  = "apache" %}
 {%- set wp_apache_group = "apache" %}
-{%- set apache_cfg_name = "/etc/httpd/conf.d/wordpress.conf" %}
+{%- set apache_cfg_name = "/etc/apache2/conf.d/wordpress.conf" %}
 {%- elif os_family == 'RedHat' %}
-{%- set wp_pkgs = ["php", "php-mysql", "php-gd"] %}
+{%- set wp_pkgs         = ["php", "php-mysql", "php-gd"] %}
 {%- set wp_apache_user  = "apache" %}
 {%- set wp_apache_group = "apache" %}
 {%- set apache_cfg_name = "/etc/httpd/conf.d/wordpress.conf" %}
 {%- elif os_family == 'Debian' %}
-{%- set wp_pkgs = ["php", "php-mysql", "php-gd"] %}
+{%- set wp_pkgs         = ["php", "php-mysql", "php-gd"] %}
 {%- set wp_apache_user  = "www-data" %}
 {%- set wp_apache_group = "www-data" %}
 {%- set apache_cfg_name = "/etc/apache2/sites-available/wordpress.conf" %}
