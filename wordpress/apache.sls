@@ -9,7 +9,7 @@
 {%- if os_family == 'Suse' %}
 {%- set apache_pkg_name = "apache2" %}
 {%- set apache_svc_name = "apache2.service" %}
-{%- set apache_cfg_name = "/etc/httpd/conf.d/wordpress.conf" %}
+{%- set apache_cfg_name = "/etc/apache2/conf.d/wordpress.conf" %}
 {%- elif os_family == 'RedHat' %}
 {%- set apache_pkg_name = "httpd" %}
 {%- set apache_svc_name = "httpd.service" %}

@@ -5,7 +5,7 @@
 {%- set apache          = p.apache %}
 {%- set wp              = p.wordpress %}
 {%- set os_family       = salt['grains.get']('os_family', None) %}
-{%- set directory_root = apache["directory_root"] %}
+{%- set directory_root  = apache["directory_root"] %}
 {%- set directory_owner = apache["directory_owner"] %}
 {%- set directory_group = apache["directory_group"] %}
 {%- set wp_db_name      = wp["wordpress_database"] %}
@@ -13,19 +13,10 @@
 {%- set wp_db_passwd    = wp["wordpress_db_password"] %}
 {%- if os_family == 'Suse' %}
 {%- set wp_pkgs         = ["php8", "php8-mysql", "php8-gd"] %}
-{%- set wp_apache_user  = "apache" %}
-{%- set wp_apache_group = "apache" %}
-{%- set apache_cfg_name = "/etc/apache2/conf.d/wordpress.conf" %}
 {%- elif os_family == 'RedHat' %}
 {%- set wp_pkgs         = ["php", "php-mysql", "php-gd"] %}
-{%- set wp_apache_user  = "apache" %}
-{%- set wp_apache_group = "apache" %}
-{%- set apache_cfg_name = "/etc/httpd/conf.d/wordpress.conf" %}
 {%- elif os_family == 'Debian' %}
 {%- set wp_pkgs         = ["php", "php-mysql", "php-gd"] %}
-{%- set wp_apache_user  = "www-data" %}
-{%- set wp_apache_group = "www-data" %}
-{%- set apache_cfg_name = "/etc/apache2/sites-available/wordpress.conf" %}
 {%- endif %}
 
 {%- if wp_pkgs|length > 0 %}
