@@ -53,6 +53,8 @@ apache_vhost:
         </VirtualHost>
     - require:
       - file: {{ directory_root }}
+    - watch_in:
+      - service: {{ apache_svc_name }}
 
 {%- if os_family == 'Debian' %}
 enable_site:
