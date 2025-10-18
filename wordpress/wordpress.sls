@@ -12,7 +12,7 @@
 {%- set wp_db_user      = wp["wordpress_db_username"] %}
 {%- set wp_db_passwd    = wp["wordpress_db_password"] %}
 {%- if os_family == 'Suse' %}
-{%- set wp_pkgs         = ["apache2-mod_php8", "php8", "php8-mysql", "php8-gd"] %}
+{%- set wp_pkgs         = ["apache2-mod_php8", "php8", "php8-mysql", "php8-gd", "php8-zlib"] %}
 {%- elif os_family == 'RedHat' %}
 {%- set wp_pkgs         = ["php", "php-mysql", "php-gd"] %}
 {%- elif os_family == 'Debian' %}
@@ -26,6 +26,8 @@ php_install:
       {%- for pkg in wp_pkgs %}
       - {{ pkg.strip() }}
       {%- endfor %}
+    - watch_in:
+        - id: apache_service
 {%- endif %}
 
 download_wordpress:
