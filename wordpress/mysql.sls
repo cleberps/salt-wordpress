@@ -1,47 +1,35 @@
-{% set os_family = grains['os_family'] %}
-{% set os_name = grains['os'] %}
-{% set db_user = pillar.get('mysql:user', 'root') %}
-{% set db_password = pillar.get('mysql:password', 'changeme') %}
+{%- set p = salt['pillar.get']('suma_wordpress')  %}
+{%- if p is defined and
+    p.mariadb is defined %}
+{%- set mariadb = p.mariadb %}
+{%- set os_family         = salt['grains.get']('os_family', None) %}
+{%- set db_admin_user     = mariadb["db_admin_user"] %}
+{%- set db_admin_password = mariadb["db_admin_password"] %}
+{%- if os_family == 'Suse' %}
+{%- set mariadb_pkg_name = "mariadb" %}
+{%- set mariadb_svc_name = "mariadb.service" %}
+{%- elif os_family == 'RedHat' %}
+{%- set mariadb_pkg_name = "mariadb" %}
+{%- set mariadb_svc_name = "mariadb.service" %}
+{%- elif os_family == 'Debian' %}
+{%- set mariadb_pkg_name = "mysql-server" %}
+{%- set mariadb_svc_name = "mysql-server.service" %}
+{%- endif %}
 
-{% if os_family == 'Suse' %}
-mysql_install:
+database_install:
   pkg.installed:
-    - name: mysql-community-server
+    - name: {{ mariadb_pkg_name }}
 
-mysql_service:
+database_service:
   service.running:
-    - name: mysql
+    - name: {{ mariadb_svc_name }}
     - enable: True
     - require:
-      - pkg: mysql_install
+      - pkg: {{ mariadb_pkg_name }}
 
-{% elif os_family == 'RedHat' %}
-mysql_install:
-  pkg.installed:
-    - name: mysql-server
-
-mysql_service:
-  service.running:
-    - name: mysqld
-    - enable: True
-    - require:
-      - pkg: mysql_install
-
-{% elif os_family == 'Debian' %}
-mysql_install:
-  pkg.installed:
-    - name: mysql-server
-
-mysql_service:
-  service.running:
-    - name: mysql
-    - enable: True
-    - require:
-      - pkg: mysql_install
-{% endif %}
-
-mysql_secure:
+database_secure:
   cmd.run:
-    - name: mysql -e "ALTER USER '{{ db_user }}'@'localhost' IDENTIFIED BY '{{ db_password }}'; FLUSH PRIVILEGES;"
+    - name: mysql -e "ALTER USER '{{ db_admin_user }}'@'localhost' IDENTIFIED BY '{{ db_admin_password }}'; FLUSH PRIVILEGES;"
     - require:
-      - service: mysql_service
+      - service: {{ mariadb_svc_name }}
+{%- endif %}

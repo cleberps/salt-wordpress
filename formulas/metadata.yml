@@ -1,0 +1,4 @@
+description:
+  Wordpress Deployment Formula for SUSE Multi-Linux Manager.
+group: Applications
+after: 

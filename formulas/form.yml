@@ -1,0 +1,56 @@
+suma_wordpress:
+  $name: "Wordpress Deployment"
+  $type: "group"
+  $scope: "system"
+  
+  apache:
+    $type: group
+    $scope: system
+    $name: "Apache configuration"
+    
+    directory_root:
+      $name: "Directory Root"
+      $type: text
+      $default: "/var/www/html/wordpress"
+      $required: true
+
+  mariadb:
+    $type: group
+    $scope: system
+    $name: "MariaDB configuration"
+    
+    db_admin_user:
+      $name: "Database admin username"
+      $type: text
+      $default: "root"
+      $required: true
+
+    db_admin_password:
+      $name: "Database admin Password"
+      $type: password
+      $default: ""
+      $required: true
+
+  wordpress:
+    $type: group
+    $scope: system
+    $name: "Wordpress configuration"
+ 
+    wordpress_database:
+      $name: "Database name"
+      $type: text
+      $default: "wordpress"
+      $required: true
+
+    wordpress_db_username:
+      $name: "Username"
+      $type: text
+      $default: "wordpress"
+      $required: true
+
+    wordpress_db_password:
+      $name: "Password"
+      $type: password
+      $default: ""
+      $required: true
+

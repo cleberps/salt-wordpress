@@ -1,42 +1,57 @@
-{% set wp_db = pillar.get('wordpress:db_name', 'wordpress') %}
-{% set wp_user = pillar.get('wordpress:db_user', 'wpuser') %}
-{% set wp_pass = pillar.get('wordpress:db_pass', 'wppass') %}
+{%- set p = salt['pillar.get']('suma_wordpress')  %}
+{%- if p is defined and
+    p.apache is defined and
+    p.wordpress is defined %}
+{%- set apache         = p.apache %}
+{%- set wp             = p.wordpress %}
+{%- set os_family      = salt['grains.get']('os_family', None) %}
+{%- set directory_root = apache["directory_root"] %}
+{%- set wp_db_name     = wp["wordpress_database"] %}
+{%- set wp_db_user     = wp["wordpress_db_username"] %}
+{%- set wp_db_passwd   = wp["wordpress_db_password"] %}
+{%- if os_family == 'Suse' %}
+{%- set wp_pkgs         = ["php8", "php8-mysql", "php8-gd"] %}
+{%- set wp_apache_user  = "apache" %}
+{%- set wp_apache_group = "apache" %}
+{%- set apache_cfg_name = "/etc/httpd/conf.d/wordpress.conf" %}
+{%- elif os_family == 'RedHat' %}
+{%- set wp_pkgs = ["php", "php-mysql", "php-gd"] %}
+{%- set wp_apache_user  = "apache" %}
+{%- set wp_apache_group = "apache" %}
+{%- set apache_cfg_name = "/etc/httpd/conf.d/wordpress.conf" %}
+{%- elif os_family == 'Debian' %}
+{%- set wp_pkgs = ["php", "php-mysql", "php-gd"] %}
+{%- set wp_apache_user  = "www-data" %}
+{%- set wp_apache_group = "www-data" %}
+{%- set apache_cfg_name = "/etc/apache2/sites-available/wordpress.conf" %}
+{%- endif %}
 
+{%- if wp_pkgs|length > 0 %}
 php_install:
   pkg.installed:
     - pkgs:
-      {% if grains['os_family'] == 'RedHat' %}
-      - php
-      - php-mysql
-      - php-gd
-      {% elif grains['os_family'] == 'Debian' %}
-      - php
-      - php-mysql
-      - php-gd
-      - libapache2-mod-php
-      {% else %}
-      - php
-      - php-mysql
-      - php-gd
-      {% endif %}
+      {%- for file in apache_pkgs %}
+      - {{ file }}
+      {%- endfor %}
+{%- endif %}
 
 download_wordpress:
   cmd.run:
     - name: wget -O /tmp/wordpress.tar.gz https://wordpress.org/latest.tar.gz
-    - unless: test -f /var/www/html/wordpress/wp-config.php
+    - unless: test -f {{ directory_root }}/wp-config.php
 
 extract_wordpress:
   cmd.run:
-    - name: tar -xzf /tmp/wordpress.tar.gz -C /var/www/html/
+    - name: tar -xzf /tmp/wordpress.tar.gz --strip-components=1 -C /var/www/html/
     - require:
       - cmd: download_wordpress
-    - unless: test -d /var/www/html/wordpress
+    - unless: test -d {{ directory_root }}
 
 wordpress_permissions:
   file.directory:
-    - name: /var/www/html/wordpress
-    - user: www-data
-    - group: www-data
+    - name: {{ directory_root }}
+    - user: {{ wp_apache_user }}
+    - group: {{ wp_apache_group }}
     - recurse:
       - user
       - group
@@ -45,16 +60,16 @@ wordpress_permissions:
 
 create_wp_database:
   cmd.run:
-    - name: mysql -e "CREATE DATABASE IF NOT EXISTS {{ wp_db }}; GRANT ALL ON {{ wp_db }}.* TO '{{ wp_user }}'@'localhost' IDENTIFIED BY '{{ wp_pass }}'; FLUSH PRIVILEGES;"
+    - name: mysql -e "CREATE DATABASE IF NOT EXISTS {{ wp_db_name }}; GRANT ALL ON {{ wp_db_name }}.* TO '{{ wp_db_user }}'@'localhost' IDENTIFIED BY '{{ wp_db_passwd }}'; FLUSH PRIVILEGES;"
 
 wordpress_config:
   file.managed:
-    - name: /var/www/html/wordpress/wp-config.php
+    - name: {{ directory_root }}/wp-config.php
     - contents: |
         <?php
-        define('DB_NAME', '{{ wp_db }}');
-        define('DB_USER', '{{ wp_user }}');
-        define('DB_PASSWORD', '{{ wp_pass }}');
+        define('DB_NAME', '{{ wp_db_name }}');
+        define('DB_USER', '{{ wp_db_user }}');
+        define('DB_PASSWORD', '{{ p_db_passwd }}');
         define('DB_HOST', 'localhost');
         define('DB_CHARSET', 'utf8');
         define('DB_COLLATE', '');
@@ -66,3 +81,4 @@ wordpress_config:
     - require:
       - cmd: extract_wordpress
       - cmd: create_wp_database
+{%- endif %}
