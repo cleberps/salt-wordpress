@@ -27,7 +27,7 @@ php_install:
       - {{ pkg.strip() }}
       {%- endfor %}
     - watch_in:
-        - id: apache_service
+      - id: apache_service
 {%- endif %}
 
 download_wordpress:
