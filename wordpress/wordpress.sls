@@ -38,7 +38,7 @@ extract_wordpress:
     - name: tar -xzf /tmp/wordpress.tar.gz --strip-components=1 -C {{ directory_root }}
     - require:
       - cmd: download_wordpress
-    - unless: test -d {{ directory_root }}
+    - unless: test -f {{ directory_root }}/wp-config.php
 
 wordpress_permissions:
   file.directory:
