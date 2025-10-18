@@ -68,7 +68,7 @@ wordpress_config:
         <?php
         define('DB_NAME', '{{ wp_db_name }}');
         define('DB_USER', '{{ wp_db_user }}');
-        define('DB_PASSWORD', '{{ p_db_passwd }}');
+        define('DB_PASSWORD', '{{ wp_db_passwd }}');
         define('DB_HOST', 'localhost');
         define('DB_CHARSET', 'utf8');
         define('DB_COLLATE', '');
