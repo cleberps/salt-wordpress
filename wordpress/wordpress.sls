@@ -12,7 +12,7 @@
 {%- set wp_db_user      = wp["wordpress_db_username"] %}
 {%- set wp_db_passwd    = wp["wordpress_db_password"] %}
 {%- if os_family == 'Suse' %}
-{%- set wp_pkgs         = ["php8", "php8-mysql", "php8-gd"] %}
+{%- set wp_pkgs         = ["apache2-mod_php8", "php8", "php8-mysql", "php8-gd"] %}
 {%- elif os_family == 'RedHat' %}
 {%- set wp_pkgs         = ["php", "php-mysql", "php-gd"] %}
 {%- elif os_family == 'Debian' %}
@@ -70,6 +70,9 @@ wordpress_config:
         if ( !defined('ABSPATH') )
             define('ABSPATH', dirname(__FILE__) . '/');
         require_once(ABSPATH . 'wp-settings.php');
+    - user: {{ directory_owner }}
+    - group: {{ directory_group }}
+    - mode: '0644'
     - require:
       - cmd: extract_wordpress
       - cmd: create_wp_database
