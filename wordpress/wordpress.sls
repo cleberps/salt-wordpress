@@ -23,7 +23,9 @@
 php_install:
   pkg.installed:
     - pkgs:
-      {% for pkg in wp_pkgs %}- {{ pkg.strip() }}{% endfor %}
+      {%- for pkg in wp_pkgs %}
+      - {{ pkg.strip() }}
+      {%- endfor %}
 {%- endif %}
 
 download_wordpress:
