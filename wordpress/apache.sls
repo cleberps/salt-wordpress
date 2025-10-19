@@ -64,5 +64,11 @@ enable_site:
       - file: {{ apache_cfg_name }}
     - watch_in:
       - service: {{ apache_svc_name }}
+{%- elif os_family == 'RedHat' %}
+enable_http_on_firewall:
+  cmd.run:
+    - name: firewall-cmd --add-service=http
+    - require:
+      - file: {{ apache_cfg_name }}
 {%- endif %}
 {%- endif %}
