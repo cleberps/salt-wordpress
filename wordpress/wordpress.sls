@@ -59,7 +59,7 @@ wordpress_permissions:
 
 create_wp_database:
   cmd.run:
-    - name: mysql -e "CREATE DATABASE IF NOT EXISTS {{ wp_db_name }}; CREATE USER IF NOT EXISTS '{{ wp_db_user }}'@'localhost' IDENTIFIED WITH mysql_native_password BY '{{ wp_db_passwd }}'; GRANT ALL PRIVILEGES ON {{ wp_db_name }}.* TO '{{ wp_db_user }}'@'localhost'; ALTER USER '{{ wp_db_user }}'@'localhost' IDENTIFIED BY '{{ wp_db_passwd }}'; FLUSH PRIVILEGES;"
+    - name: mysql -e "CREATE DATABASE IF NOT EXISTS {{ wp_db_name }}; CREATE USER IF NOT EXISTS '{{ wp_db_user }}'@'localhost' IDENTIFIED BY '{{ wp_db_passwd }}'; GRANT ALL PRIVILEGES ON {{ wp_db_name }}.* TO '{{ wp_db_user }}'@'localhost'; ALTER USER '{{ wp_db_user }}'@'localhost' IDENTIFIED BY '{{ wp_db_passwd }}'; FLUSH PRIVILEGES;"
 
 create_wp_config:
   file.managed:

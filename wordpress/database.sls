@@ -32,7 +32,7 @@ database_service:
 
 database_secure:
   cmd.run:
-    - name: mysql -e "ALTER USER '{{ db_admin_user }}'@'localhost' IDENTIFIED WITH mysql_native_password BY '{{ db_admin_password }}'; GRANT ALL PRIVILEGES ON *.* TO '{{ db_admin_user }}'@'localhost' WITH GRANT OPTION; FLUSH PRIVILEGES;"
+    - name: mysql -e "ALTER USER '{{ db_admin_user }}'@'localhost' IDENTIFIED BY '{{ db_admin_password }}'; GRANT ALL PRIVILEGES ON *.* TO '{{ db_admin_user }}'@'localhost' WITH GRANT OPTION; FLUSH PRIVILEGES;"
     - require:
       - service: {{ mariadb_svc_name }}
 
