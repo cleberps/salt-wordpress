@@ -59,7 +59,7 @@ apache_vhost:
 {%- if os_family == 'Debian' %}
 enable_site:
   cmd.run:
-    - name: a2ensite wordpress.conf && a2enmod rewrite
+    - name: a2ensite wordpress.conf && a2enmod rewrite && a2dissite 000-default
     - require:
       - file: {{ apache_cfg_name }}
     - watch_in:
