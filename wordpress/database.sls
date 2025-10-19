@@ -8,10 +8,10 @@
 {%- if os_family == 'Suse' %}
 {%- set mariadb_pkg_name = "mariadb" %}
 {%- set mariadb_svc_name = "mariadb.service" %}
-{%- set mariadb_pwd_file = "/etc/my.cnf.d/90-salt.cnf" %}
+{%- set mariadb_pwd_file = "/etc/my.cnf.d/salt.cnf" %}
 {%- elif os_family == 'RedHat' %}
-{%- set mariadb_pkg_name = "mariadb" %}
-{%- set mariadb_svc_name = "mariadb.service" %}
+{%- set mariadb_pkg_name = "mariadb-server" %}
+{%- set mariadb_svc_name = "mariadb-server.service" %}
 {%- set mariadb_pwd_file = "/etc/my.cnf.d/salt.cnf" %}
 {%- elif os_family == 'Debian' %}
 {%- set mariadb_pkg_name = "mysql-server" %}

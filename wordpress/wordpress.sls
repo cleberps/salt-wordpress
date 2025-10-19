@@ -15,7 +15,7 @@
 {%- set wp_pkgs         = ["apache2-mod_php8", "php8", "php8-mysql", "php8-gd", "php8-zlib"] %}
 {%- set apache_svc_name = "apache2.service" %}
 {%- elif os_family == 'RedHat' %}
-{%- set wp_pkgs         = ["php", "php-mysql", "php-gd"] %}
+{%- set wp_pkgs         = ["php", "php-pdo", "php-mysqlnd", "php-gd"] %}
 {%- set apache_svc_name = "httpd.service" %}
 {%- elif os_family == 'Debian' %}
 {%- set wp_pkgs         = ["php", "php-mysql", "php-gd"] %}
